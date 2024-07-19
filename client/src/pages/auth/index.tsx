@@ -4,18 +4,54 @@ import victory from '@/assets/victory.png'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { toast } from 'sonner'
+import { LOGIN_ROUTE, SIGNUP_ROUTE } from '@/utils/constants'
+import { apiClient } from '@/lib/api-client'
 
 const Auth: React.FC = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
 
+    const validateLogin = () => {
+        if(!email.length){
+            toast.error("Email is required")
+            return false
+        }
+        if(!password.length){
+            toast.error("Password is required")
+            return false
+        }
+        return true
+    }
+
+    const validateSignup = () => {
+        if(!email.length){
+            toast.error("Email is required")
+            return false
+        }
+        if(!password.length){
+            toast.error("Password is required")
+            return false
+        }
+        if(password !== confirmPassword){
+            toast.error("Confirm password should be the same as password")
+            return false
+        }
+        return true
+    }
     const handleLogin = async () => {
-        
+        if(validateLogin()){
+            const response = await apiClient.post(LOGIN_ROUTE, {email, password},{withCredentials: true})
+            console.log({ response })
+        }
     }
 
     const handleRegister = async () => {
-
+        if(validateSignup()){
+            const response = await apiClient.post(SIGNUP_ROUTE, {email, password}, {withCredentials: true})
+            console.log({ response })
+        }
     }
 
   return (
